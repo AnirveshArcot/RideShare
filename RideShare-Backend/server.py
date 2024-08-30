@@ -17,6 +17,7 @@ MONGO_USR=os.getenv("MONGO_USR")
 MONGO_PASS=os.getenv("MONGO_PASS")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALLOWED_CORS=os.getenv("ALLOWED_CORS")
+print(ALLOWED_CORS)
 
 app = FastAPI()
 
