@@ -11,18 +11,23 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
+
+MONGO_USR=os.getenv("MONGO_USR")
+MONGO_PASS=os.getenv("MONGO_PASS")
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALLOWED_CORS=os.getenv("ALLOWED_CORS")
+
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # List of allowed origins
+    allow_origins=[ALLOWED_CORS],  # List of allowed origins
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods
     allow_headers=["*"],  # Allow all HTTP headers
 )
-MONGO_USR=os.getenv("MONGO_USR")
-MONGO_PASS=os.getenv("MONGO_PASS")
-SECRET_KEY = os.getenv("SECRET_KEY")
+
 
 
 
