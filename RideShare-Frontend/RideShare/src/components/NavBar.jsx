@@ -55,6 +55,7 @@ const Navbar = () => {
     } else {
       console.error("Phone number not set");
     }
+    window.location.reload();
   };
 
 

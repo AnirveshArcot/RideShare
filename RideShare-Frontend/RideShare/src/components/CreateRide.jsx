@@ -15,21 +15,17 @@ const CreateRide = () => {
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  function convertTimeToDateTime(timeString) {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const day = String(now.getDate()).padStart(2, '0');
-    const [hours, minutes] = timeString.split(':');
-    const combinedDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00`);
-    const timezoneOffset = now.getTimezoneOffset() / 60;
-    const sign = timezoneOffset > 0 ? '-' : '+';
-    const offsetHours = String(Math.floor(Math.abs(timezoneOffset))).padStart(2, '0');
-    const offsetMinutes = String(Math.abs(timezoneOffset) % 1 * 60).padStart(2, '0');
-    const timezone = `${sign}${offsetHours}:${offsetMinutes}`;
-    const formattedDate = `${combinedDate.toISOString().split('.')[0]}${timezone}`;
-    return formattedDate;
-  }
+function convertTimeToDateTime(timeString) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const [hours, minutes] = timeString.split(':');
+  const combinedDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00Z`);
+  const formattedDate = combinedDate.toISOString().split('.')[0] + 'Z';
+  
+  return formattedDate;
+}
 
   useEffect(() => {
     const token = localStorage.getItem("token");
