@@ -40,9 +40,7 @@ scheduler.add_job(
 )
 scheduler.start()
 
-@app.on_event("shutdown")
-def shutdown_event():
-    scheduler.shutdown()
+
 
 MONGO_USR=os.getenv("MONGO_USR")
 MONGO_PASS=os.getenv("MONGO_PASS")
@@ -199,3 +197,6 @@ async def delete_ride(phone_no: str):
         raise HTTPException(status_code=404, detail="Ride not found")
     return {"message": "Ride deleted successfully"}
 
+@app.on_event("shutdown")
+def shutdown_event():
+    scheduler.shutdown()
