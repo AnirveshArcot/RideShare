@@ -9,15 +9,46 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import os
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+import httpx
+import logging
 from dotenv import load_dotenv
 load_dotenv()
 
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+async def ping_url():
+    url = "https://serverpinger-z62t.onrender.com/"
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url)
+            logger.info(f"Ping successful: {response.status_code}")
+        except httpx.HTTPStatusError as e:
+            logger.error(f"Ping failed: {e}")
+
+# Setup the scheduler
+scheduler = BackgroundScheduler()
+scheduler.add_job(
+    ping_url,
+    IntervalTrigger(minutes=10),  # Trigger every 10 minutes
+    id='ping_job',
+    name='Ping the rides URL every 10 minutes',
+    replace_existing=True
+)
+scheduler.start()
+
+@app.on_event("shutdown")
+def shutdown_event():
+    scheduler.shutdown()
 
 MONGO_USR=os.getenv("MONGO_USR")
 MONGO_PASS=os.getenv("MONGO_PASS")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALLOWED_CORS=os.getenv("ALLOWED_CORS")
-print(ALLOWED_CORS)
+print(ALLOWED_CORS  )
 
 app = FastAPI()
 
